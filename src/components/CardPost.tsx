@@ -8,11 +8,16 @@ interface IProps {
 export default function CardPost({ data }: IProps) {
   return (
     <Link to={`/details/${data.id}`}>
-      <div className="max-w-[26rem] max-h-[16.25rem] rounded-[0.625rem] p-8">
-        <header className="flex justify-between">
-          <h1>{data.title}</h1>
+      <div className="w-[26rem] h-[16.25rem] rounded-[0.625rem] p-8 bg-base-post">
+        <header className="flex justify-between items-start">
+          <h1 className="text-base-title font-bold leading-text text-xl">
+            {data.title}
+          </h1>
+          <span className="text-base-span text-sm">Há 1 dia</span>
         </header>
-        <p className="mt-5">{data.description}</p>
+        <p className="mt-5 text-base-text text-base leading-text">
+          {data.description}
+        </p>
       </div>
     </Link>
   );
