@@ -6,34 +6,37 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { IPost, postApi } from '../api/post.api';
+import { IUser, userApi } from '../api/user.api';
 import CardPost from '../components/CardPost';
 import Github from './../assets/github-logo.svg';
 
 export default function Home() {
+  const [user, setUser] = useState({} as IUser);
   const [posts, setPosts] = useState<IPost[]>([]);
   const quantPosts = posts.length;
 
   useEffect(() => {
-    postApi.find().then(({ data }) => setPosts(data as IPost[]));
+    Promise.all([userApi.find('rlima-ferreira'), postApi.find()]).then(
+      (resp) => {
+        setUser(resp[0].data);
+        setPosts(resp[1].data);
+      }
+    );
   }, []);
 
   return (
     <div>
       {/* Intro */}
       <div className="flex items-center px-10 py-8 w-full bg-base-profile rounded-[10px] gap-8">
-        <img
-          src="https://github.com/rlima-ferreira.png?size=200"
-          alt=""
-          className="rounded-lg w-36 h-36"
-        />
+        <img src={user.avatar_url} alt="" className="rounded-lg w-36 h-36" />
         <div className="flex-1 flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between">
             <h1 className="text-base-title font-bold text-2xl leading-text">
-              Teste
+              {user.name}
             </h1>
             <a
-              href="http://"
+              href={user.html_url}
               className="flex items-center gap-2 text-sky-500 leading-text text-xs uppercase font-bold"
             >
               Github
@@ -43,7 +46,7 @@ export default function Home() {
 
           {/* Bio */}
           <p className="mt-2 text-base-text text-base leading-text">
-            Lorem Ipsum
+            {user.bio}
           </p>
 
           {/* Social Icons */}
@@ -53,21 +56,21 @@ export default function Home() {
                 src={Github}
                 className="text-base-label w-[0.875rem] h-[0.875rem]"
               />
-              rlima-ferreira
+              {user.login}
             </span>
             <span className="flex gap-2 items-center text-base-subtitle text-sm leading-text">
               <FontAwesomeIcon
                 icon={faBuilding}
                 className="text-base-label text-sm"
               />
-              UFRJ
+              {user.company}
             </span>
             <span className="flex gap-2 items-center text-base-subtitle text-base leading-text">
               <FontAwesomeIcon
                 icon={faUserGroup}
                 className="text-base-label text-sm"
               />
-              32 seguidores
+              {user.followers} seguidores
             </span>
           </div>
         </div>

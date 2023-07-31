@@ -1,6 +1,7 @@
 import api from '../libs/axios';
 
-const route = '';
+const route =
+  'repos/rlima-ferreira/ignite-reat-challenge-03-github-blog/issues';
 
 export interface IPost {
   id: number;
