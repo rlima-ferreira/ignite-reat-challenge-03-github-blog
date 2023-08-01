@@ -1,28 +1,32 @@
+import { useContext, useEffect, useState } from 'react';
 import {
-  faArrowUpRightFromSquare,
-  faBuilding,
-  faUserGroup,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+  FaBuilding,
+  FaExternalLinkSquareAlt,
+  FaGithub,
+  FaUserFriends,
+} from 'react-icons/fa';
 import { IPost, postApi } from '../api/post.api';
-import { IUser, userApi } from '../api/user.api';
 import CardPost from '../components/CardPost';
-import Github from './../assets/github-logo.svg';
+import SocialInfo from '../components/SocialInfo';
+import { InputBase } from '../components/base/Input';
+import { AnchorBase } from '../components/base/Link';
+import { UserContext } from '../contexts/UserContext';
 
 export default function Home() {
-  const [user, setUser] = useState({} as IUser);
+  const { user } = useContext(UserContext);
   const [posts, setPosts] = useState<IPost[]>([]);
   const quantPosts = posts.length;
 
   useEffect(() => {
-    Promise.all([userApi.find('rlima-ferreira'), postApi.find()]).then(
-      (resp) => {
-        setUser(resp[0].data);
-        setPosts(resp[1].data);
-      }
-    );
+    postApi
+      .find()
+      .then(({ data }) => setPosts(data))
+      .catch((err) => console.log(err));
   }, []);
+
+  // async function handleSearchPost(data: any) {
+  //   //
+  // }
 
   return (
     <div>
@@ -35,13 +39,10 @@ export default function Home() {
             <h1 className="text-base-title font-bold text-2xl leading-text">
               {user.name}
             </h1>
-            <a
-              href={user.html_url}
-              className="flex items-center gap-2 text-sky-500 leading-text text-xs uppercase font-bold"
-            >
+            <AnchorBase href={user.html_url}>
               Github
-              <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-            </a>
+              <FaExternalLinkSquareAlt />
+            </AnchorBase>
           </div>
 
           {/* Bio */}
@@ -51,33 +52,18 @@ export default function Home() {
 
           {/* Social Icons */}
           <div className="flex gap-6 mt-6">
-            <span className="flex gap-2 items-center text-base-subtitle text-sm leading-text">
-              <img
-                src={Github}
-                className="text-base-label w-[0.875rem] h-[0.875rem]"
-              />
-              {user.login}
-            </span>
-            <span className="flex gap-2 items-center text-base-subtitle text-sm leading-text">
-              <FontAwesomeIcon
-                icon={faBuilding}
-                className="text-base-label text-sm"
-              />
-              {user.company}
-            </span>
-            <span className="flex gap-2 items-center text-base-subtitle text-base leading-text">
-              <FontAwesomeIcon
-                icon={faUserGroup}
-                className="text-base-label text-sm"
-              />
-              {user.followers} seguidores
-            </span>
+            <SocialInfo icon={<FaGithub />} info={user.login} />
+            <SocialInfo icon={<FaBuilding />} info={String(user.company)} />
+            <SocialInfo
+              icon={<FaUserFriends />}
+              info={`${user.followers} seguidores`}
+            />
           </div>
         </div>
       </div>
 
       {/* Search Form */}
-      <form action="" className="mt-[4.5rem]">
+      <form action="post" className="mt-[4.5rem]">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-start leading-text">
             <label
@@ -90,12 +76,7 @@ export default function Home() {
               {quantPosts} publicações
             </span>
           </div>
-          <input
-            type="search"
-            id="search"
-            className="w-full px-3 py-4 rounded-lg active:text-base-text bg-base-input placeholder:text-base-label active:border-sky-500"
-            placeholder="Buscar conteúdo"
-          />
+          <InputBase id="search" placeholder="Buscar conteúdo" />
         </div>
       </form>
 
