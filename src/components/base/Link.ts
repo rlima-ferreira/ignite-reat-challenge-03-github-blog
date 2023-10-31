@@ -25,6 +25,7 @@ export const LinkBase = styled(Link)`
   font-size: 0.75rem;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 
   &:hover {
     border-bottom: 1px solid ${(props) => props.theme.colors['sky-500']};

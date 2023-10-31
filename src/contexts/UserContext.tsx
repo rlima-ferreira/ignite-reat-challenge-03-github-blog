@@ -16,7 +16,7 @@ export default function UserProvider({ children }: IProps) {
 
   useEffect(() => {
     userApi
-      .find('rlima-ferreira')
+      .find()
       .then(({ data }) => setUser(data))
       .catch((err) => console.log(err));
   }, []);

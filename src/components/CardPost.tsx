@@ -7,7 +7,7 @@ interface IProps {
 
 export default function CardPost({ data }: IProps) {
   return (
-    <Link to={`/${data.id}`}>
+    <Link to={`/${data.number}`}>
       <div className="w-[26rem] h-[16.25rem] rounded-[0.625rem] p-8 bg-base-post">
         <header className="flex justify-between items-start">
           <h1 className="text-base-title font-bold leading-text text-xl">
@@ -16,7 +16,7 @@ export default function CardPost({ data }: IProps) {
           <span className="text-base-span text-sm">Há 1 dia</span>
         </header>
         <p className="mt-5 text-base-text text-base leading-text">
-          {data.description}
+          {data.body}
         </p>
       </div>
     </Link>

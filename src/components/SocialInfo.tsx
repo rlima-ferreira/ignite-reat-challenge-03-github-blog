@@ -8,9 +8,9 @@ interface IProps {
 
 export default function SocialInfo(props: IProps) {
   return (
-    <p className="flex gap-2 items-center text-base-subtitle text-sm leading-text">
-      <span className="text-base-label text-sm">{props.icon}</span>
-      {props.info}
-    </p>
+    <div className="flex gap-2 items-center text-base-subtitle">
+      <span className="text-base-label text-base">{props.icon}</span>
+      <p className="text-sm">{props.info}</p>
+    </div>
   );
 }

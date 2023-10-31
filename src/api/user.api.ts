@@ -1,5 +1,6 @@
 import api from '../libs/axios';
 
+const username = import.meta.env.VITE_GITHUB_USER;
 const route = '/users';
 
 export interface IUser {
@@ -13,5 +14,5 @@ export interface IUser {
 }
 
 export const userApi = {
-  find: async (username: string) => api.get(`${route}/${username}`),
+  find: async () => api.get(`${route}/${username}`),
 };

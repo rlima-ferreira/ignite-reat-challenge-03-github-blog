@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { FocusEvent, useContext, useEffect, useState } from 'react';
 import {
   FaBuilding,
   FaExternalLinkSquareAlt,
@@ -24,9 +24,20 @@ export default function Home() {
       .catch((err) => console.log(err));
   }, []);
 
-  // async function handleSearchPost(data: any) {
-  //   //
-  // }
+  async function handleSearchPost(ev: FocusEvent<HTMLInputElement>) {
+    const { value } = ev.target;
+
+    try {
+      const { data, status } = await postApi.search(value);
+      if (status !== 200)
+        throw new Error(
+          'Falha no servidor, por favor tente novamente mais tarde'
+        );
+      setPosts(data.items);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <div>
@@ -76,14 +87,18 @@ export default function Home() {
               {quantPosts} publicações
             </span>
           </div>
-          <InputBase id="search" placeholder="Buscar conteúdo" />
+          <InputBase
+            id="search"
+            placeholder="Buscar conteúdo"
+            onBlur={handleSearchPost}
+          />
         </div>
       </form>
 
       {/* List Post */}
       <div className="flex flex-wrap gap-8 mt-12">
         {posts.map((post) => (
-          <CardPost key={post.id} data={post} />
+          <CardPost key={post.number} data={post} />
         ))}
       </div>
     </div>
