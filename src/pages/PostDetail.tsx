@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FaCalendarDay,
   FaChevronLeft,
@@ -6,14 +6,14 @@ import {
   FaExternalLinkSquareAlt,
   FaGithub,
 } from 'react-icons/fa';
+import Markdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
+import rehypeRaw from 'rehype-raw';
 import { IPost, postApi } from '../api/post.api';
 import SocialInfo from '../components/SocialInfo';
 import { AnchorBase, LinkBase } from '../components/base/Link';
-import { UserContext } from '../contexts/UserContext';
 
 export default function PostDetail() {
-  const { user } = useContext(UserContext);
   const { id } = useParams();
   const [post, setPost] = useState<IPost>({} as IPost);
 
@@ -33,7 +33,7 @@ export default function PostDetail() {
             <FaChevronLeft />
             Voltar
           </LinkBase>
-          <AnchorBase href={user.html_url}>
+          <AnchorBase href={post.html_url}>
             Ver no Github
             <FaExternalLinkSquareAlt />
           </AnchorBase>
@@ -43,15 +43,19 @@ export default function PostDetail() {
         </h1>
         {/* Social Icons */}
         <div className="flex gap-6 mt-2">
-          <SocialInfo icon={<FaGithub />} info={user.login} />
-          <SocialInfo icon={<FaCalendarDay />} info={String(user.company)} />
+          <SocialInfo icon={<FaGithub />} info={post.user?.login} />
+          <SocialInfo icon={<FaCalendarDay />} info={String(post.created_at)} />
           <SocialInfo
             icon={<FaComment />}
-            info={`${user.followers} comentários`}
+            info={`${post.comments} comentários`}
           />
         </div>
       </div>
-      <main className="px-8 py-10"></main>
+      <Markdown
+        className="px-8 py-10 text-white"
+        rehypePlugins={[rehypeRaw]}
+        children={post.body}
+      />
     </div>
   );
 }

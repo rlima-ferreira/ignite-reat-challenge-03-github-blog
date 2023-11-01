@@ -13,9 +13,9 @@ export default function CardPost({ data }: IProps) {
           <h1 className="text-base-title font-bold leading-text text-xl">
             {data.title}
           </h1>
-          <span className="text-base-span text-sm">Há 1 dia</span>
+          <span className="text-base-span text-sm">{data.created_at}</span>
         </header>
-        <p className="mt-5 text-base-text text-base leading-text">
+        <p className="mt-5 text-base-text text-base leading-text line-clamp-4">
           {data.body}
         </p>
       </div>
